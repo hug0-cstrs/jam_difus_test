@@ -1,4 +1,4 @@
-# 🎮 Football Manager Pro
+# :soccer: Football Manager Pro
 
 <div align="center">
   <img src="assets/favicon/soccer-ball.svg" alt="Logo Football Manager Pro" width="120"/>
