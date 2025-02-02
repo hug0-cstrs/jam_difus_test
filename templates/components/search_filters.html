@@ -1,0 +1,36 @@
+<div class="row my-5">
+  <div class="col-md-6">
+    <div class="input-group my-3 my-md-0">
+      <input
+        type="text"
+        id="searchInput"
+        class="form-control rounded-0"
+        placeholder="Rechercher un joueur..."
+      />
+      <span class="input-group-text rounded-0" id="searchButton">
+        <i class="fas fa-search"></i>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="d-flex gap-2">
+      <select id="teamFilter" class="form-select rounded-0">
+        <option value="">Toutes les équipes</option>
+      </select>
+      <select id="positionFilter" class="form-select rounded-0">
+        <option value="">Toutes les positions</option>
+        <option value="Attaquant">Attaquant</option>
+        <option value="Milieu">Milieu</option>
+        <option value="Défenseur">Défenseur</option>
+        <option value="Gardien">Gardien</option>
+      </select>
+      <button
+        class="btn btn-add rounded-0 d-flex align-items-center justify-content-center"
+        id="addPlayerBtn"
+        title="Ajouter un nouveau joueur"
+      >
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+  </div>
+</div>

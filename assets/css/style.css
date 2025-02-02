@@ -1,0 +1,462 @@
+/**
+ * Football Manager Pro - Feuille de style principale
+ * Version: 1.0.0
+ * Description: Styles pour l'application de gestion de joueurs de football
+ */
+
+/* ==========================================================================
+   Table des matières
+   ==========================================================================
+   1. Variables & Thèmes
+   2. Reset & Styles de base
+   3. Layout & Structure
+   4. Composants
+      4.1 Navigation
+      4.2 Header & Footer
+      4.3 Player Cards
+      4.4 Formulaires
+      4.5 Boutons
+      4.6 Modales
+      4.7 Notifications
+   5. Utilitaires & Animations
+   6. Media Queries
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Variables & Thèmes
+   ========================================================================== */
+
+:root {
+  /* Couleurs principales */
+  --green-color: rgb(34, 201, 78);
+  --green-color-hover: rgb(1, 175, 47);
+  --danger-color: rgb(248, 43, 24);
+  --danger-color-hover: rgb(181, 38, 25);
+  --black-color: #000000;
+  --black-color-hover: rgba(0, 0, 0, 0.77);
+
+  /* Thème clair */
+  --background-color: #f8f9fa;
+  --text-color: #000000;
+  --card-bg: #ffffff;
+  --modal-bg: #ffffff;
+  --navbar-bg: #ffffff;
+  --navbar-text: #000000;
+  --footer-bg: #ffffff;
+  --footer-text: #000000;
+  --btn-text-color: #ffffff;
+  --theme-toggle-bg: #000000;
+
+  /* Effets */
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --box-shadow-footer: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Thème sombre */
+:root[data-bs-theme="dark"] {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+  --modal-bg: #1e1e1e;
+  --navbar-bg: #000000;
+  --navbar-text: #ffffff;
+  --footer-bg: #000000;
+  --footer-text: #ffffff;
+  --btn-text-color: #000000;
+  --theme-toggle-bg: #ffffff;
+  --black-color: #ffffff;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   2. Reset & Styles de base
+   ========================================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   3. Layout & Structure
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ==========================================================================
+   4. Composants
+   ========================================================================== */
+
+/* 4.1 Navigation
+   ========================================================================== */
+
+.navbar {
+  background-color: var(--navbar-bg) !important;
+  box-shadow: var(--box-shadow);
+  color: var(--navbar-text) !important;
+}
+
+.navbar-brand {
+  color: var(--navbar-text) !important;
+  font-size: 1.4rem;
+}
+
+#themeToggle {
+  background-color: var(--theme-toggle-bg) !important;
+  transition: transform 0.3s ease;
+}
+
+#themeToggle:hover {
+  transform: scale(1.05);
+}
+
+/* 4.2 Header & Footer
+   ========================================================================== */
+
+header {
+  background-color: var(--black-color);
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  box-shadow: var(--box-shadow-footer);
+  text-align: center;
+  margin-top: auto;
+}
+
+/* 4.3 Player Cards
+   ========================================================================== */
+
+.player-card {
+  background: var(--card-bg);
+  color: var(--text-color);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.player-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.player-card .card-header {
+  background: black;
+  color: white;
+  padding: 1rem;
+  border-bottom: none;
+}
+
+.player-card .card-body {
+  padding: 1.5rem;
+}
+
+/* Player Image & Avatar */
+.player-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  min-height: 100px;
+}
+
+.player-image {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.player-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--green-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+/* Player Stats */
+.player-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  background-color: var(--background-color) !important;
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* 4.4 Formulaires
+   ========================================================================== */
+
+.form-control,
+.form-select {
+  padding: 0.75rem 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-color: var(--black-color) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem var(--background-color);
+  text-decoration: none;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--danger-color) !important;
+  background-image: none;
+}
+
+.invalid-feedback {
+  display: none;
+  color: var(--danger-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+/* 4.5 Boutons
+   ========================================================================== */
+
+.btn-action,
+.btn-add {
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  transform: scale(1.05);
+}
+
+.btn-add,
+.btn-add:hover,
+.btn-add:focus {
+  background-color: var(--black-color);
+  color: var(--btn-text-color);
+}
+
+.details-btn {
+  background-color: var(--green-color) !important;
+}
+
+.edit-btn,
+.delete-btn,
+.details-btn {
+  color: var(--text-color) !important;
+}
+
+.btn-action.details-btn:hover {
+  background-color: var(--green-color-hover) !important;
+}
+
+#searchButton {
+  background-color: var(--black-color);
+  color: var(--btn-text-color);
+  cursor: pointer;
+  border: none;
+}
+
+/* 4.6 Modales
+   ========================================================================== */
+
+.modal-content {
+  background: var(--modal-bg);
+  color: var(--text-color);
+  border: none;
+  box-shadow: var(--card-shadow);
+}
+
+.modal-header {
+  background: black;
+  color: white;
+  border-bottom: none;
+}
+
+.modal.fade .modal-dialog {
+  transform: scale(0.8);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: scale(1);
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+/* Boutons de modale */
+.btn-save {
+  background-color: var(--green-color);
+  color: var(--text-color);
+}
+
+.btn-action.btn-save:hover {
+  background-color: var(--green-color-hover);
+  color: var(--text-color);
+}
+
+.cancel-btn,
+.cancel-btn:hover {
+  color: var(--text-color);
+}
+
+.cancel-remove-btn {
+  background-color: var(--green-color);
+  color: white;
+}
+
+.cancel-remove-btn:hover {
+  background-color: var(--green-color-hover);
+  color: white;
+}
+
+/* 4.7 Notifications
+   ========================================================================== */
+
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  min-width: 250px;
+  z-index: 1050;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: none;
+}
+
+/* ==========================================================================
+   5. Utilitaires & Animations
+   ========================================================================== */
+
+/* Loading Spinner */
+.spinner-border {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 0.2em;
+}
+
+/* AOS Animation */
+[data-aos] {
+  pointer-events: none;
+}
+
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   6. Media Queries
+   ========================================================================== */
+
+/* Tablettes et petits écrans */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .player-card {
+    margin-bottom: 1rem;
+  }
+
+  .d-flex.gap-2 {
+    flex-direction: column;
+  }
+
+  .form-select {
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  nav a {
+    font-size: 0.8rem;
+  }
+}

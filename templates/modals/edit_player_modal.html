@@ -1,0 +1,104 @@
+<!-- Modal pour modifier un joueur -->
+<div class="modal fade rounded-0" id="editPlayerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered rounded-0">
+    <div class="modal-content rounded-0">
+      <div class="modal-header rounded-0">
+        <h5 class="modal-title">Modifier le joueur</h5>
+        <button
+          type="button"
+          class="btn-close rounded-0 bg-light"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="editPlayerForm">
+          <input type="hidden" id="editPlayerId" />
+          <div class="mb-3">
+            <label for="editPlayerName" class="form-label">Nom</label>
+            <input
+              type="text"
+              class="form-control rounded-0"
+              id="editPlayerName"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerPosition" class="form-label">Position</label>
+            <select class="form-select rounded-0" id="editPlayerPosition">
+              <option value="">Sélectionner une position</option>
+              <option value="Attaquant">Attaquant</option>
+              <option value="Milieu">Milieu</option>
+              <option value="Défenseur">Défenseur</option>
+              <option value="Gardien">Gardien</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerTeam" class="form-label">Équipe</label>
+            <input
+              type="text"
+              class="form-control rounded-0"
+              id="editPlayerTeam"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerAge" class="form-label">Âge</label>
+            <input
+              type="number"
+              class="form-control rounded-0"
+              id="editPlayerAge"
+              min="15"
+              max="45"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerNationality" class="form-label"
+              >Nationalité</label
+            >
+            <input
+              type="text"
+              class="form-control rounded-0"
+              id="editPlayerNationality"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerGoals" class="form-label">Buts marqués</label>
+            <input
+              type="number"
+              class="form-control rounded-0"
+              id="editPlayerGoals"
+              min="0"
+              value="0"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editPlayerImage" class="form-label"
+              >URL de l'image</label
+            >
+            <input
+              type="url"
+              class="form-control rounded-0"
+              id="editPlayerImage"
+              placeholder="https://exemple.com/image.jpg"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-action btn-danger cancel-btn rounded-0"
+          data-bs-dismiss="modal"
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          form="editPlayerForm"
+          class="btn btn-action btn-save rounded-0"
+          id="updatePlayerBtn"
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

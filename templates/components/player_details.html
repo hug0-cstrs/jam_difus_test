@@ -1,0 +1,29 @@
+<div class="player-details">
+  <div class="player-image mb-3 mx-auto">
+    {{#if image_url}}
+    <div class="player-image">
+      <img src="{{image_url}}" alt="{{name}}" class="img-fluid rounded" />
+    </div>
+    {{else}}
+    <div class="player-avatar">{{firstLetter name}}</div>
+    {{/if}}
+  </div>
+  <div class="player-stats">
+    <div class="stat-item">
+      <small>Âge</small>
+      <h4>{{age}} ans</h4>
+    </div>
+    <div class="stat-item">
+      <small>Buts marqués</small>
+      <h4>{{default goals_scored 0}}</h4>
+    </div>
+    <div class="stat-item">
+      <small>Nationalité</small>
+      <h4>{{nationality}}</h4>
+    </div>
+    <div class="stat-item">
+      <small>Position</small>
+      <h4>{{position}}</h4>
+    </div>
+  </div>
+</div>

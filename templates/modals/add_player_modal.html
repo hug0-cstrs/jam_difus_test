@@ -1,0 +1,93 @@
+<!-- Modal pour ajouter un joueur -->
+<div class="modal fade rounded-0" id="addPlayerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered rounded-0">
+    <div class="modal-content rounded-0">
+      <div class="modal-header rounded-0">
+        <h5 class="modal-title">Ajouter un nouveau joueur</h5>
+        <button
+          type="button"
+          class="btn-close rounded-0 bg-light"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="playerForm">
+          <div class="mb-3">
+            <label for="playerName" class="form-label">Nom<span class="text-danger">*</span></label>
+            <input type="text" class="form-control rounded-0" id="playerName" />
+          </div>
+          <div class="mb-3">
+            <label for="playerPosition" class="form-label">Position<span class="text-danger">*</span></label>
+            <select class="form-select rounded-0" id="playerPosition">
+              <option value="">Sélectionner une position</option>
+              <option value="Attaquant">Attaquant</option>
+              <option value="Milieu">Milieu</option>
+              <option value="Défenseur">Défenseur</option>
+              <option value="Gardien">Gardien</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="playerTeam" class="form-label">Équipe<span class="text-danger">*</span></label>
+            <input type="text" class="form-control rounded-0" id="playerTeam" />
+          </div>
+          <div class="mb-3">
+            <label for="playerAge" class="form-label">Âge<span class="text-danger">*</span></label>
+            <input
+              type="number"
+              class="form-control rounded-0"
+              id="playerAge"
+              min="15"
+              max="45"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="playerNationality" class="form-label"
+              >Nationalité<span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control rounded-0"
+              id="playerNationality"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="playerGoals" class="form-label">Buts marqués</label>
+            <input
+              type="number"
+              class="form-control rounded-0"
+              id="playerGoals"
+              min="0"
+              value="0"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="playerImage" class="form-label">URL de l'image</label>
+            <input
+              type="url"
+              class="form-control rounded-0"
+              id="playerImage"
+              placeholder="https://exemple.com/image.jpg"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-action btn-danger cancel-btn rounded-0"
+          data-bs-dismiss="modal"
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          form="playerForm"
+          class="btn btn-action btn-save rounded-0"
+          id="savePlayerBtn"
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
