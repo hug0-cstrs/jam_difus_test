@@ -62,7 +62,7 @@ L'interface utilisateur moderne et intuitive rend ces opérations simples et acc
 1. **Clonez le dépôt**
 
 ```bash
-git clone https://github.com/votre-username/football-manager-pro.git
+git clone https://github.com/votre-username/jam_difus_test.git
 cd football-manager-pro
 ```
 
@@ -189,7 +189,6 @@ Pour exécuter la suite de tests complète :
 - ✅ Firefox (dernières versions)
 - ✅ Safari (dernières versions)
 - ✅ Edge (dernières versions)
-- ✅ Mobile browsers
 
 ## 🚀 Améliorations futures
 
@@ -210,11 +209,5 @@ Pour exécuter la suite de tests complète :
 - 📦 **Gestion des dépendances avec Composer**
   - Mise en place de Composer pour la gestion des dépendances
   - Création du dossier vendor pour les bibliothèques tierces
-  - Configuration du fichier composer.json avec :
-    - PHPUnit pour les tests
-    - PHP_CodeSniffer pour le style de code
-    - PHP-CS-Fixer pour la correction automatique
-    - Monolog pour la gestion des logs
-    - PHPQuery pour le parsing HTML
   - Automatisation de l'installation des dépendances via composer install
   - Gestion des versions des bibliothèques
