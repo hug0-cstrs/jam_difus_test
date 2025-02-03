@@ -93,6 +93,10 @@ body {
   min-height: 100vh;
 }
 
+main {
+  flex: 1 0 auto;
+}
+
 a {
   text-decoration: none;
 }
@@ -106,7 +110,7 @@ a:hover {
    ========================================================================== */
 
 .container {
-  width: 100%;
+  width: 90%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;

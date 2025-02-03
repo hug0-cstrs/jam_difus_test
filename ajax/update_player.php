@@ -10,13 +10,13 @@ try {
         throw new Exception('ID du joueur manquant');
     }
 
-    $stmt = $pdo->prepare('UPDATE players SET 
-        name = ?, 
-        position = ?, 
-        team = ?, 
-        age = ?, 
-        nationality = ?, 
-        goals_scored = ?, 
+    $stmt = $pdo->prepare('UPDATE players SET
+        name = ?,
+        position = ?,
+        team = ?,
+        age = ?,
+        nationality = ?,
+        goals_scored = ?,
         image_url = ?
         WHERE id = ?'
     );
