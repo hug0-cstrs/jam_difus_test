@@ -1,35 +1,50 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/phpquery_adapter.php';
 
-header('Content-Type: application/json');
-
-// Vérification de la méthode de requête
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Méthode non autorisée']);
-    exit;
+if (!defined('PHPUNIT_RUNNING')) {
+    header('Content-Type: application/json');
 }
-// Vérification de l'ID du joueur
-if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'ID du joueur manquant ou invalide']);
+
+if ($_SERVER['REQUEST_METHOD'] !== 'DELETE' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
     exit;
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM players WHERE id = ?");
-    $result = $stmt->execute([$_POST['id']]);
-
-    // Vérification du résultat de la suppression
-    if ($result && $stmt->rowCount() > 0) {
-        http_response_code(200);
-        echo json_encode(['success' => true, 'message' => 'Joueur supprimé avec succès']);
-    } else {
-        http_response_code(404);
-        echo json_encode(['error' => 'Joueur non trouvé']);
+    // Vérifier si l'ID est fourni
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (!isset($data['id']) || !is_numeric($data['id'])) {
+        throw new Exception('ID du joueur invalide');
     }
-} catch (PDOException $e) {
-    // Gestion des erreurs de base de données
+
+    $playerId = intval($data['id']);
+
+    // Vérifier si le joueur existe
+    $checkStmt = $pdo->prepare("SELECT id FROM players WHERE id = ?");
+    $checkStmt->execute([$playerId]);
+    if (!$checkStmt->fetch()) {
+        throw new Exception('Joueur non trouvé');
+    }
+
+    // Supprimer le joueur
+    $stmt = $pdo->prepare("DELETE FROM players WHERE id = ?");
+    $success = $stmt->execute([$playerId]);
+
+    if (!$success) {
+        throw new Exception('Erreur lors de la suppression du joueur');
+    }
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Joueur supprimé avec succès'
+    ]);
+
+} catch (Exception $e) {
+    error_log('Erreur lors de la suppression : ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['error' => 'Erreur lors de la suppression du joueur']);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/template_manager.php';
 
 if (!defined('PHPUNIT_RUNNING')) {
     header('Content-Type: application/json');
@@ -10,7 +11,9 @@ if (defined('PHPUNIT_RUNNING')) {
     global $pdo;
 }
 
-// Valider l'ID du joueur
+$templateManager = TemplateManager::getInstance();
+
+// Valider l'ID du joueur avec phpQuery
 if (!isset($_GET['id']) || 
     !is_numeric($_GET['id']) || 
     intval($_GET['id']) != $_GET['id'] || 
@@ -27,7 +30,7 @@ if (!isset($_GET['id']) ||
 try {
     $stmt = $pdo->prepare("SELECT * FROM players WHERE id = ?");
     $stmt->execute([intval($_GET['id'])]);
-    $player = $stmt->fetch();
+    $player = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Vérification si le joueur existe dans la base de données
     if (!$player) {
@@ -40,7 +43,16 @@ try {
         }
     }
 
-    echo json_encode($player);
+    // Modeler les détails du joueur avec le gestionnaire de templates
+    $playerDetails = $templateManager->modelPlayerDetails($player);
+
+    // Préparer la réponse avec le HTML modelé et les données
+    $response = [
+        'html' => $playerDetails->html(),
+        'data' => $player
+    ];
+
+    echo json_encode($response);
 } catch (PDOException $e) {
     if (!defined('PHPUNIT_RUNNING')) {
         http_response_code(500);

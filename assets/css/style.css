@@ -175,6 +175,7 @@ footer {
   box-shadow: var(--card-shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
+  height: 100%;
 }
 
 .player-card:hover {
@@ -183,8 +184,8 @@ footer {
 }
 
 .player-card .card-header {
-  background: black;
-  color: white;
+  background: var(--navbar-bg);
+  color: var(--text-color);
   padding: 1rem;
   border-bottom: none;
 }
@@ -193,12 +194,11 @@ footer {
   padding: 1.5rem;
 }
 
-/* Player Image & Avatar */
 .player-info {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  min-height: 100px;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .player-image {
@@ -206,7 +206,6 @@ footer {
   height: 100px;
   overflow: hidden;
   border-radius: 50%;
-  margin-right: 1rem;
   flex-shrink: 0;
 }
 
@@ -217,17 +216,20 @@ footer {
 }
 
 .player-avatar {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: var(--green-color);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin-right: 1rem;
+}
+
+.player-info-text {
+  flex: 1;
 }
 
 /* Player Stats */
@@ -301,17 +303,18 @@ footer {
 }
 
 .details-btn {
-  background-color: var(--green-color) !important;
+  background-color: var(--green-color);
+  color: white;
 }
 
-.edit-btn,
-.delete-btn,
-.details-btn {
-  color: var(--text-color) !important;
+.edit-btn {
+  background-color: #ffc107;
+  color: black;
 }
 
-.btn-action.details-btn:hover {
-  background-color: var(--green-color-hover) !important;
+.delete-btn {
+  background-color: var(--danger-color);
+  color: white;
 }
 
 #searchButton {
@@ -348,6 +351,45 @@ footer {
 
 .modal-footer {
   border-top: none;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+/* Style spécifique pour la modal de confirmation */
+#deleteModal .modal-content {
+  box-shadow: var(--card-shadow);
+}
+
+#deleteModal .modal-header {
+  padding: 1rem;
+}
+
+#deleteModal .modal-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+#deleteModal .modal-footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+#deleteModal .btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  #deleteModal .modal-footer {
+    flex-direction: column;
+  }
+
+  #deleteModal .btn {
+    width: 50%;
+  }
 }
 
 /* Boutons de modale */
@@ -463,4 +505,92 @@ footer {
   nav a {
     font-size: 0.8rem;
   }
+}
+
+/* Players List Container */
+.players-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0 -1rem;
+}
+
+/* Confirmation Messages */
+.confirmation-message {
+  margin: 1rem 0;
+}
+
+.confirmation-message .alert {
+  border-radius: 0;
+  margin-bottom: 0;
+  padding: 1rem 1.25rem;
+}
+
+.confirmation-message .message-content {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-message .message-details {
+  font-size: 0.9rem;
+}
+
+.confirmation-message .message-details ul {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+
+.confirmation-message .message-details li {
+  margin-bottom: 0.25rem;
+}
+
+.confirmation-message .message-details li:last-child {
+  margin-bottom: 0;
+}
+
+/* Alert Types */
+.alert-success {
+  background-color: rgba(34, 201, 78, 0.1);
+  border-color: var(--green-color);
+  color: var(--green-color);
+}
+
+.alert-danger {
+  background-color: rgba(248, 43, 24, 0.1);
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-color: #ffc107;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: rgba(13, 202, 240, 0.1);
+  border-color: #0dcaf0;
+  color: #055160;
+}
+
+/* Dark Theme Adjustments */
+:root[data-bs-theme="dark"] .alert-success {
+  background-color: rgba(34, 201, 78, 0.2);
+  color: #98ffa8;
+}
+
+:root[data-bs-theme="dark"] .alert-danger {
+  background-color: rgba(248, 43, 24, 0.2);
+  color: #ff8b8b;
+}
+
+:root[data-bs-theme="dark"] .alert-warning {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffe083;
+}
+
+:root[data-bs-theme="dark"] .alert-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: #9eeaf9;
 }

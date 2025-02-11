@@ -138,15 +138,24 @@ $(document).ready(function () {
           this.showLoader();
         },
         success: (response) => {
-          State.setPlayers(response);
-          this.displayPlayers(response);
-          if (!filters.team) this.updateTeamFilter(response);
+          if (response.success) {
+            State.setPlayers(response.players);
+            this.displayPlayers(response.players);
+            if (!filters.team) this.updateTeamFilter(response.players);
+          } else {
+            UIManager.showToast(
+              response.error || "Erreur lors du chargement des joueurs",
+              "danger"
+            );
+          }
         },
-        error: () =>
+        error: (xhr) => {
+          const response = xhr.responseJSON;
           UIManager.showToast(
-            "Erreur lors du chargement des joueurs",
+            response?.error || "Erreur lors du chargement des joueurs",
             "danger"
-          ),
+          );
+        },
       });
     },
 
@@ -226,6 +235,7 @@ $(document).ready(function () {
     },
 
     updateTeamFilter(players) {
+      if (!Array.isArray(players)) return;
       const teams = [...new Set(players.map((p) => p.team))].sort();
       const teamFilter = $("#teamFilter");
       teamFilter.find("option:not(:first)").remove();
@@ -448,13 +458,30 @@ $(document).ready(function () {
       $.ajax({
         url: CONFIG.URLS.DELETE_PLAYER,
         method: "POST",
-        data: { id: State.currentPlayerId },
-        success: () => {
-          $("#deleteModal").modal("hide");
-          PlayerManager.loadPlayers(State.currentFilters);
-          this.showToast("Joueur supprimé avec succès", "success");
+        contentType: "application/json",
+        data: JSON.stringify({ id: State.currentPlayerId }),
+        success: (response) => {
+          if (response.success) {
+            $("#deleteModal").modal("hide");
+            PlayerManager.loadPlayers(State.currentFilters);
+            this.showToast(
+              response.message || "Joueur supprimé avec succès",
+              "success"
+            );
+          } else {
+            this.showToast(
+              response.error || "Erreur lors de la suppression",
+              "danger"
+            );
+          }
         },
-        error: () => this.showToast("Erreur lors de la suppression", "danger"),
+        error: (xhr) => {
+          const response = xhr.responseJSON;
+          this.showToast(
+            response?.error || "Erreur lors de la suppression",
+            "danger"
+          );
+        },
       });
     },
 

@@ -1,43 +1,30 @@
-<div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="${index * 100}">
+<div class="col-md-4" data-aos="fade-up">
   <div class="player-card">
     <div class="card-header">
-      <h5 class="mb-0">${player.name}</h5>
+      <h5 class="mb-0"></h5>
     </div>
     <div class="card-body">
       <div class="player-info">
-        ${ player.image_url ? `
         <div class="player-image">
-          <img
-            src="${player.image_url}"
-            alt="${player.name}"
-            class="img-fluid rounded"
-          />
+          <!-- L'image ou l'avatar sera injecté ici -->
         </div>
-        ` : `
-        <div class="player-avatar">${player.name.charAt(0)}</div>
-        ` }
-        <div>
-          <p class="mb-1"><strong>Équipe:</strong> ${player.team}</p>
-          <p class="mb-0"><strong>Position:</strong> ${player.position}</p>
+        <div class="player-info-text">
+          <p class="mb-1">
+            <strong>Équipe:</strong> <span class="player-team"></span>
+          </p>
+          <p class="mb-0">
+            <strong>Position:</strong> <span class="player-position"></span>
+          </p>
         </div>
       </div>
       <div class="d-flex gap-2">
-        <button
-          class="btn btn-action details-btn rounded-0"
-          data-id="${player.id}"
-        >
+        <button class="btn btn-action details-btn">
           <i class="fas fa-info-circle"></i> Détails
         </button>
-        <button
-          class="btn btn-warning btn-action edit-btn rounded-0"
-          data-id="${player.id}"
-        >
+        <button class="btn btn-action edit-btn">
           <i class="fas fa-edit"></i>
         </button>
-        <button
-          class="btn btn-danger btn-action delete-btn rounded-0"
-          data-id="${player.id}"
-        >
+        <button class="btn btn-action delete-btn">
           <i class="fas fa-trash"></i>
         </button>
       </div>

@@ -1,5 +1,9 @@
 <?php
+require_once 'includes/phpquery_adapter.php';
+require_once 'includes/template_manager.php';
+
 $base_url = '/jamDifus_test';
+$templateManager = TemplateManager::getInstance();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,20 +24,43 @@ $base_url = '/jamDifus_test';
 </head>
 
 <body>
-  <?php include 'templates/components/navbar.html'; ?>
+  <?php 
+  // Charger et modeler la navbar
+  $navbar = $templateManager->loadTemplate('components/navbar.html');
+  $navbar->find('.navbar-brand')->text('Football Manager Pro 2024');
+  $navbar->find('#themeToggle')->attr('title', 'Changer le thème');
+  echo $navbar->html();
+  ?>
 
   <div class="container mt-4">
-    <?php include 'templates/components/search_filters.html'; ?>
+    <?php 
+    // Charger et modeler les filtres de recherche
+    $searchFilters = $templateManager->loadTemplate('components/search_filters.html');
+    $searchFilters->find('#searchInput')->attr('placeholder', 'Rechercher un joueur...');
+    $searchFilters->find('#teamFilter option:first')->text('Toutes les équipes');
+    $searchFilters->find('#positionFilter option:first')->text('Toutes les positions');
+    echo $searchFilters->html();
+    ?>
 
     <div id="players-container" class="row g-4">
       <!-- Les cartes des joueurs seront injectées ici dynamiquement -->
     </div>
   </div>
 
-  <?php include 'templates/modals/player_details_modal.html'; ?>
-  <?php include 'templates/modals/delete_confirmation_modal.html'; ?>
-  <?php include 'templates/modals/add_player_modal.html'; ?>
-  <?php include 'templates/modals/edit_player_modal.html'; ?>
+  <?php 
+  // Charger et modeler les modales
+  $modals = [
+    'player_details_modal',
+    'delete_confirmation_modal',
+    'add_player_modal',
+    'edit_player_modal'
+  ];
+
+  foreach ($modals as $modalType) {
+    $modal = $templateManager->modelModal($modalType);
+    echo $modal->html();
+  }
+  ?>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -42,6 +69,12 @@ $base_url = '/jamDifus_test';
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
 </body>
 
-<?php include 'templates/components/footer.html'; ?>
+<?php 
+// Charger et modeler le footer
+$footer = $templateManager->loadTemplate('components/footer.html');
+$footer->find('.footer-content')->addClass('py-3');
+$footer->find('.copyright')->text('© ' . date('Y') . ' Football Manager Pro. Tous droits réservés.');
+echo $footer->html();
+?>
 
 </html>
