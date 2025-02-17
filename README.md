@@ -96,7 +96,7 @@ Football Manager Pro est une application CRUD (Create, Read, Update, Delete) rob
 
 ```bash
 git clone https://github.com/hug0-cstrs/jam_difus_test.git
-cd football-manager-pro
+cd jam_difus_test
 ```
 
 2. **Installation des dépendances**
