@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+require_once __DIR__ . '/../../TestCase.php';
 
 class AddPlayerTest extends TestCase
 {
@@ -41,7 +41,7 @@ class AddPlayerTest extends TestCase
         $this->setInputStream(json_encode($testPlayer));
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -68,12 +68,12 @@ class AddPlayerTest extends TestCase
         $this->setInputStream(json_encode($testPlayer));
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
         $this->assertArrayHasKey('error', $result);
-        $this->assertEquals('Données invalides : champs manquants', $result['error']);
+        $this->assertEquals('Le champ team est requis', $result['error']);
     }
 
     public function testAddPlayerWithInvalidAge()
@@ -92,7 +92,7 @@ class AddPlayerTest extends TestCase
         $this->setInputStream(json_encode($testPlayer));
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -116,7 +116,7 @@ class AddPlayerTest extends TestCase
         $this->setInputStream(json_encode($testPlayer));
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -140,7 +140,7 @@ class AddPlayerTest extends TestCase
         $this->setInputStream(json_encode($testPlayer));
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -153,7 +153,7 @@ class AddPlayerTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'GET';
         
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -167,7 +167,7 @@ class AddPlayerTest extends TestCase
         $this->setInputStream('invalid json');
 
         ob_start();
-        include __DIR__ . '/../ajax/add_player.php';
+        include __DIR__ . '/../../../ajax/add_player.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);

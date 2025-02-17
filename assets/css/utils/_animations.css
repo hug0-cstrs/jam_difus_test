@@ -1,0 +1,73 @@
+/* Animations & Utilitaires */
+.spinner-border {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 0.2em;
+}
+
+/* AOS Animation */
+[data-aos] {
+  pointer-events: none;
+}
+
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
+
+/* Toast Notifications */
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  min-width: 250px;
+  z-index: 1050;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: none;
+}
+
+/* Alert Types */
+.alert-success {
+  background-color: rgba(34, 201, 78, 0.1);
+  border-color: var(--green-color);
+  color: var(--green-color);
+}
+
+.alert-danger {
+  background-color: rgba(248, 43, 24, 0.1);
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-color: #ffc107;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: rgba(13, 202, 240, 0.1);
+  border-color: #0dcaf0;
+  color: #055160;
+}
+
+/* Dark Theme Alert Adjustments */
+:root[data-bs-theme="dark"] .alert-success {
+  background-color: rgba(34, 201, 78, 0.2);
+  color: #98ffa8;
+}
+
+:root[data-bs-theme="dark"] .alert-danger {
+  background-color: rgba(248, 43, 24, 0.2);
+  color: #ff8b8b;
+}
+
+:root[data-bs-theme="dark"] .alert-warning {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffe083;
+}
+
+:root[data-bs-theme="dark"] .alert-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: #9eeaf9;
+}

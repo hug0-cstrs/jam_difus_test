@@ -24,16 +24,29 @@ $_SERVER['REQUEST_URI'] = '/';
 
 // Créer une connexion de test à la base de données
 function getTestDatabaseConnection() {
-    global $pdo;
-    $pdo = new PDO(
-        'mysql:host=localhost;dbname=football_test;charset=utf8',
-        'jamDifus',
-        'jam',
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-    return $pdo;
+    try {
+        $pdo = new PDO(
+            'mysql:host=localhost;dbname=football_test;charset=utf8',
+            'jamDifus',
+            'jam',
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]
+        );
+        return $pdo;
+    } catch (PDOException $e) {
+        echo "Erreur de connexion à la base de données de test : " . $e->getMessage() . "\n";
+        exit(1);
+    }
 }
 
 // Initialiser la connexion PDO globale pour les tests
 global $pdo;
-$pdo = getTestDatabaseConnection(); 
+try {
+    $pdo = getTestDatabaseConnection();
+} catch (Exception $e) {
+    echo "Erreur lors de l'initialisation de la base de données de test : " . $e->getMessage() . "\n";
+    exit(1);
+}
+?> 

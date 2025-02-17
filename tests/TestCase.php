@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
-require_once __DIR__ . '/PhpInputStreamMock.php';
+require_once __DIR__ . '/Mocks/PhpInputStreamMock.php';
 
 class TestCase extends BaseTestCase
 {

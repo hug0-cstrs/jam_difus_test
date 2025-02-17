@@ -1,0 +1,65 @@
+/* Modales */
+.modal-content {
+  background: var(--modal-bg);
+  color: var(--text-color);
+  border: none;
+  box-shadow: var(--card-shadow);
+}
+
+.modal-header {
+  background: black;
+  color: white;
+  border-bottom: none;
+}
+
+.modal.fade .modal-dialog {
+  transform: scale(0.8);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: scale(1);
+}
+
+.modal-footer {
+  border-top: none;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+/* Style spécifique pour la modal de confirmation */
+#deleteModal .modal-content {
+  box-shadow: var(--card-shadow);
+}
+
+#deleteModal .modal-header {
+  padding: 1rem;
+}
+
+#deleteModal .modal-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+#deleteModal .modal-footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+#deleteModal .btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  #deleteModal .modal-footer {
+    flex-direction: column;
+  }
+
+  #deleteModal .btn {
+    width: 50%;
+  }
+}

@@ -17,6 +17,7 @@ $(document).ready(function () {
       UPDATE_PLAYER: "ajax/update_player.php",
       DELETE_PLAYER: "ajax/delete_player.php",
       PLAYER_DETAILS_TEMPLATE: "templates/components/player_details.html",
+      PLAYER_CARD_TEMPLATE: "templates/components/player_card.html",
     },
     VALIDATION: {
       AGE: {
@@ -47,6 +48,7 @@ $(document).ready(function () {
       position: "",
     },
     playerDetailsTemplate: "",
+    playerCardTemplate: "",
 
     // Setters
     setPlayers(newPlayers) {
@@ -58,8 +60,8 @@ $(document).ready(function () {
     setFilters(filters) {
       this.currentFilters = { ...this.currentFilters, ...filters };
     },
-    setTemplate(template) {
-      this.playerDetailsTemplate = template;
+    setTemplate(type, template) {
+      this[`${type}Template`] = template;
     },
   };
 
@@ -112,7 +114,11 @@ $(document).ready(function () {
     init() {
       this.container = $("#players-container");
       this.bindEvents();
-      this.loadPlayers();
+      // Charger d'abord le template, puis les joueurs
+      $.get(CONFIG.URLS.PLAYER_CARD_TEMPLATE, (template) => {
+        State.setTemplate("playerCard", template);
+        this.loadPlayers();
+      });
     },
 
     bindEvents() {
@@ -185,53 +191,32 @@ $(document).ready(function () {
     },
 
     createPlayerCard(player, index) {
-      return $(`
-        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="${
-          index * 100
-        }">
-          <div class="player-card">
-            <div class="card-header">
-              <h5 class="mb-0">${player.name}</h5>
-            </div>
-            <div class="card-body">
-              <div class="player-info">
-                ${this.getPlayerImage(player)}
-                <div>
-                  <p class="mb-1"><strong>Équipe:</strong> ${player.team}</p>
-                  <p class="mb-0"><strong>Position:</strong> ${
-                    player.position
-                  }</p>
-                </div>
-              </div>
-              <div class="d-flex gap-2">
-                ${this.getActionButtons(player.id)}
-              </div>
-            </div>
-          </div>
-        </div>
-      `);
-    },
+      const $card = $(State.playerCardTemplate);
 
-    getPlayerImage(player) {
-      return player.image_url
-        ? `<div class="player-image">
-            <img src="${player.image_url}" alt="${player.name}" class="img-fluid rounded"/>
-           </div>`
-        : `<div class="player-avatar">${player.name.charAt(0)}</div>`;
-    },
+      // Mise à jour des données du joueur
+      $card.attr("data-aos-delay", index * 100);
+      $card.find(".card-header h5").text(player.name);
+      $card.find(".player-team").text(player.team);
+      $card.find(".player-position").text(player.position);
 
-    getActionButtons(playerId) {
-      return `
-        <button class="btn btn-action details-btn rounded-0" data-id="${playerId}">
-          <i class="fas fa-info-circle"></i> Détails
-        </button>
-        <button class="btn btn-warning btn-action edit-btn rounded-0" data-id="${playerId}">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="btn btn-danger btn-action delete-btn rounded-0" data-id="${playerId}">
-          <i class="fas fa-trash"></i>
-        </button>
-      `;
+      // Mise à jour de l'image
+      const $imageContainer = $card.find(".player-image");
+      if (player.image_url) {
+        $imageContainer.html(
+          `<img src="${player.image_url}" alt="${player.name}" class="img-fluid rounded"/>`
+        );
+      } else {
+        $imageContainer.replaceWith(
+          `<div class="player-avatar">${player.name.charAt(0)}</div>`
+        );
+      }
+
+      // Mise à jour des boutons d'action
+      $card.find(".details-btn").attr("data-id", player.id);
+      $card.find(".edit-btn").attr("data-id", player.id);
+      $card.find(".delete-btn").attr("data-id", player.id);
+
+      return $card;
     },
 
     updateTeamFilter(players) {
@@ -534,9 +519,9 @@ $(document).ready(function () {
      Initialisation de l'application
      ========================================================================== */
   function initializeApp() {
-    // Chargement du template des détails
+    // Chargement des templates
     $.get(CONFIG.URLS.PLAYER_DETAILS_TEMPLATE, (template) => {
-      State.setTemplate(template);
+      State.setTemplate("playerDetails", template);
     }).fail(() => {
       console.error("Erreur lors du chargement du template des détails");
     });

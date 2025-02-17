@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../../TestCase.php';
+
 use PHPUnit\Framework\TestCase;
 
 class DbTest extends TestCase

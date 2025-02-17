@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+require_once __DIR__ . '/../../TestCase.php';
 
-class GetPlayerDetailsTest extends TestCase
+class GetPlayerTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -26,7 +26,7 @@ class GetPlayerDetailsTest extends TestCase
         // Insérer des données de test
         $this->pdo->exec("
             INSERT INTO players (name, team, position, age, nationality, goals_scored, image_url) VALUES
-            ('John Doe', 'Real Madrid', 'Attaquant', 25, 'France', 10, 'john.jpg')
+            ('John Doe', 'Real Madrid', 'Attaquant', 25, 'France', 10, 'https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png')
         ");
     }
 
@@ -34,7 +34,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = ['id' => 1];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -44,14 +44,14 @@ class GetPlayerDetailsTest extends TestCase
         $this->assertEquals(25, $result['age']);
         $this->assertEquals('France', $result['nationality']);
         $this->assertEquals(10, $result['goals_scored']);
-        $this->assertEquals('john.jpg', $result['image_url']);
+        $this->assertEquals('https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png', $result['image_url']);
     }
 
     public function testGetInvalidPlayerId()
     {
         $_GET = ['id' => 999];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -63,7 +63,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = [];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -75,7 +75,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = ['id' => 'abc'];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -87,7 +87,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = ['id' => -1];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -99,7 +99,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = ['id' => 0];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);
@@ -111,7 +111,7 @@ class GetPlayerDetailsTest extends TestCase
     {
         $_GET = ['id' => 1.5];
         ob_start();
-        include __DIR__ . '/../ajax/get_player_details.php';
+        include __DIR__ . '/../../../ajax/get_player_details.php';
         $output = ob_get_clean();
 
         $result = json_decode($output, true);

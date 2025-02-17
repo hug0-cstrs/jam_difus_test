@@ -1,9 +1,12 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/template_manager.php';
+require_once __DIR__ . '/../includes/models/Player.php';
 
-// Utiliser la connexion PDO de test si elle existe
+// Activer l'affichage des erreurs en mode test
 if (defined('PHPUNIT_RUNNING')) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
     global $pdo;
 }
 
@@ -13,30 +16,37 @@ if (!defined('PHPUNIT_RUNNING')) {
 
 // Vérifier si la requête est de type POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit;
+    $response = ['success' => false, 'error' => 'Méthode non autorisée'];
+    echo json_encode($response);
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(405);
+        exit;
+    }
+    return;
 }
 
 try {
-    $templateManager = TemplateManager::getInstance();
+    // Récupérer les données
+    $input = file_get_contents('php://input');
+    if (!$input) {
+        throw new Exception('Données manquantes');
+    }
+
+    $data = json_decode($input, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('Données invalides');
+    }
+
+    // Créer et valider le joueur
+    $player = new Player($data);
     
-    // Récupérer et valider les données
-    $data = json_decode(file_get_contents('php://input'), true);
-    $validation = $templateManager->validatePlayerForm($data);
-    
-    if (!$validation['isValid']) {
-        $errorMessage = $templateManager->modelConfirmation(
-            'error',
-            'Erreur de validation',
-            '<ul><li>' . implode('</li><li>', $validation['errors']) . '</li></ul>'
-        );
-        
-        echo json_encode([
-            'success' => false,
-            'errors' => $validation['errors'],
-            'html' => $errorMessage->html()
-        ]);
-        exit;
+    if (!$player->isValid()) {
+        throw new Exception($player->getValidationError());
+    }
+
+    // Valider la position
+    if (!in_array($player->getPosition(), Player::getValidPositions())) {
+        throw new Exception('Position invalide');
     }
 
     // Préparation de la requête
@@ -45,67 +55,34 @@ try {
     
     // Exécution de la requête
     $stmt->execute([
-        $data['name'],
-        $data['team'],
-        $data['position'],
-        $data['age'],
-        $data['nationality'],
-        $data['goals_scored'] ?? 0,
-        $data['image_url'] ?? null
+        $player->getName(),
+        $player->getTeam(),
+        $player->getPosition(),
+        $player->getAge(),
+        $player->getNationality(),
+        $player->getGoalsScored(),
+        $player->getImageUrl()
     ]);
     
     $newPlayerId = $pdo->lastInsertId();
-    $data['id'] = $newPlayerId;
+
+    // Récupérer le joueur créé pour confirmation
+    $stmt = $pdo->prepare("SELECT * FROM players WHERE id = ?");
+    $stmt->execute([$newPlayerId]);
+    $newPlayerData = $stmt->fetch(PDO::FETCH_ASSOC);
+    $newPlayer = new Player($newPlayerData);
     
-    // Modeler la carte du nouveau joueur
-    $playerCard = $templateManager->modelPlayerCard($data);
-    
-    // Modeler le message de confirmation
-    $confirmation = $templateManager->modelConfirmation(
-        'success',
-        'Joueur ajouté avec succès',
-        'Le joueur ' . $data['name'] . ' a été ajouté à l\'équipe ' . $data['team']
-    );
-    
-    // Préparer la réponse
-    $response = [
+    echo json_encode([
         'success' => true,
-        'message' => 'Joueur ajouté avec succès',
-        'player' => $data,
-        'html' => $playerCard->html(),
-        'confirmation' => $confirmation->html()
-    ];
+        'id' => $newPlayerId
+    ] + $newPlayer->toArray());
     
-    echo json_encode($response);
-    
-} catch (PDOException $e) {
-    error_log('Erreur SQL : ' . $e->getMessage());
-    $errorMessage = $templateManager->modelConfirmation(
-        'error',
-        'Erreur lors de l\'ajout du joueur',
-        'Une erreur est survenue lors de l\'enregistrement dans la base de données.'
-    );
-    
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Erreur lors de l\'ajout du joueur',
-        'html' => $errorMessage->html()
-    ]);
-    exit;
 } catch (Exception $e) {
-    error_log('Erreur générale : ' . $e->getMessage());
-    $errorMessage = $templateManager->modelConfirmation(
-        'error',
-        'Erreur inattendue',
-        'Une erreur inattendue est survenue lors de l\'ajout du joueur.'
-    );
-    
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Erreur inattendue',
-        'html' => $errorMessage->html()
-    ]);
-    exit;
+    $response = ['success' => false, 'error' => $e->getMessage()];
+    echo json_encode($response);
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(500);
+        exit;
+    }
+    return;
 } 

@@ -1,57 +1,62 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/phpquery_adapter.php';
+require_once __DIR__ . '/../includes/models/Player.php';
 
 if (!defined('PHPUNIT_RUNNING')) {
     header('Content-Type: application/json');
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit;
+if (defined('PHPUNIT_RUNNING')) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    global $pdo;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $response = ['success' => false, 'error' => 'Méthode non autorisée'];
+    echo json_encode($response);
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(405);
+        exit;
+    }
+    return;
 }
 
 try {
-    $pq = PhpQueryAdapter::getInstance();
-    
-    // Récupérer et valider les données avec phpQuery
-    $data = json_decode(file_get_contents('php://input'), true);
-    $formContent = $pq->wrapContent('<form></form>');
+    // Récupérer les données
+    $data = $_POST;
+    if (empty($_POST)) {
+        $input = file_get_contents('php://input');
+        $jsonData = json_decode($input, true);
+        if ($jsonData !== null) {
+            $data = $jsonData;
+        }
+    }
     
     // Validation de l'ID
     if (!isset($data['id']) || !is_numeric($data['id'])) {
-        echo json_encode(['error' => "ID du joueur invalide"]);
-        exit;
-    }
-    
-    // Validation des champs requis
-    $requiredFields = ['name', 'team', 'position', 'age', 'nationality'];
-    foreach ($requiredFields as $field) {
-        $input = $pq->wrapContent('<input>');
-        $input->find('input')
-            ->attr('name', $field)
-            ->attr('value', $data[$field] ?? '');
-            
-        if (empty($data[$field])) {
-            echo json_encode(['error' => "Le champ {$field} est requis"]);
-            exit;
-        }
-        
-        $formContent->append($input);
-    }
-    
-    // Validation de l'âge
-    if (!is_numeric($data['age']) || $data['age'] < 15 || $data['age'] > 45) {
-        echo json_encode(['error' => "L'âge doit être compris entre 15 et 45 ans"]);
-        exit;
+        throw new Exception('ID du joueur invalide');
     }
 
     // Vérifier si le joueur existe
-    $checkStmt = $pdo->prepare("SELECT id FROM players WHERE id = ?");
+    $checkStmt = $pdo->prepare("SELECT * FROM players WHERE id = ?");
     $checkStmt->execute([$data['id']]);
-    if (!$checkStmt->fetch()) {
-        echo json_encode(['error' => "Joueur non trouvé"]);
-        exit;
+    $existingPlayerData = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$existingPlayerData) {
+        throw new Exception("Joueur non trouvé");
+    }
+
+    // Créer et valider le nouveau joueur
+    $player = new Player($data);
+    
+    if (!$player->isValid()) {
+        throw new Exception($player->getValidationError());
+    }
+
+    // Valider la position
+    if (!in_array($player->getPosition(), Player::getValidPositions())) {
+        throw new Exception('Position invalide');
     }
 
     // Préparation de la requête
@@ -60,56 +65,33 @@ try {
     
     // Exécution de la requête
     $stmt->execute([
-        $data['name'],
-        $data['team'],
-        $data['position'],
-        $data['age'],
-        $data['nationality'],
-        $data['goals_scored'],
-        $data['image_url'] ?? null,
+        $player->getName(),
+        $player->getTeam(),
+        $player->getPosition(),
+        $player->getAge(),
+        $player->getNationality(),
+        $player->getGoalsScored(),
+        $player->getImageUrl(),
         $data['id']
     ]);
     
-    // Charger le template de carte joueur pour le joueur mis à jour
-    $playerCardTemplate = file_get_contents(__DIR__ . '/../templates/components/player_card.html');
-    $playerCard = $pq->wrapContent($playerCardTemplate);
+    // Récupérer le joueur mis à jour
+    $stmt = $pdo->prepare("SELECT * FROM players WHERE id = ?");
+    $stmt->execute([$data['id']]);
+    $updatedPlayerData = $stmt->fetch(PDO::FETCH_ASSOC);
+    $updatedPlayer = new Player($updatedPlayerData);
     
-    // Modeler la carte avec phpQuery
-    $playerCard->find('.player-name')->text($data['name']);
-    $playerCard->find('.player-team')->text($data['team']);
-    $playerCard->find('.player-position')->text($data['position']);
-    
-    // Gérer l'image du joueur
-    if (!empty($data['image_url'])) {
-        $playerCard->find('.player-image')->html(
-            '<img src="' . $data['image_url'] . '" alt="' . $data['name'] . '" class="img-fluid rounded">'
-        );
-    } else {
-        $playerCard->find('.player-image')->html(
-            '<div class="player-avatar">' . substr($data['name'], 0, 1) . '</div>'
-        );
-    }
-    
-    // Ajouter les attributs data
-    $playerCard->find('.player-card')
-        ->attr('data-id', $data['id'])
-        ->attr('data-name', $data['name'])
-        ->attr('data-team', $data['team'])
-        ->attr('data-position', $data['position']);
-    
-    // Préparer la réponse
-    $response = [
+    echo json_encode([
         'success' => true,
-        'message' => 'Joueur mis à jour avec succès',
-        'player' => $data,
-        'html' => $playerCard->html()
-    ];
+        'id' => $data['id']
+    ] + $updatedPlayer->toArray());
     
+} catch (Exception $e) {
+    $response = ['success' => false, 'error' => $e->getMessage()];
     echo json_encode($response);
-    
-} catch (PDOException $e) {
-    error_log('Erreur SQL : ' . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['error' => 'Erreur lors de la mise à jour du joueur']);
-    exit;
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(500);
+        exit;
+    }
+    return;
 } 

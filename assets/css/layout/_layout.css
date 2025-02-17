@@ -1,0 +1,58 @@
+/* Layout & Structure */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  background-color: var(--black-color);
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  box-shadow: var(--box-shadow-footer);
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--navbar-bg) !important;
+  box-shadow: var(--box-shadow);
+  color: var(--navbar-text) !important;
+}
+
+.navbar-brand {
+  color: var(--navbar-text) !important;
+  font-size: 1.4rem;
+}
+
+#themeToggle {
+  background-color: var(--theme-toggle-bg) !important;
+  transition: transform 0.3s ease;
+}
+
+#themeToggle:hover {
+  transform: scale(1.05);
+}
+
+/* Players List Container */
+.players-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0 -1rem;
+}

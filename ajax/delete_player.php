@@ -1,19 +1,38 @@
 <?php
 require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/phpquery_adapter.php';
 
 if (!defined('PHPUNIT_RUNNING')) {
     header('Content-Type: application/json');
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'DELETE' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit;
+if (defined('PHPUNIT_RUNNING')) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    global $pdo;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $response = ['success' => false, 'error' => 'Méthode non autorisée'];
+    echo json_encode($response);
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(405);
+        exit;
+    }
+    return;
 }
 
 try {
+    // Récupérer les données (soit de $_POST soit du corps JSON)
+    $data = $_POST;
+    if (empty($_POST)) {
+        $input = file_get_contents('php://input');
+        $jsonData = json_decode($input, true);
+        if ($jsonData !== null) {
+            $data = $jsonData;
+        }
+    }
+
     // Vérifier si l'ID est fourni
-    $data = json_decode(file_get_contents('php://input'), true);
     if (!isset($data['id']) || !is_numeric($data['id'])) {
         throw new Exception('ID du joueur invalide');
     }
@@ -41,10 +60,11 @@ try {
     ]);
 
 } catch (Exception $e) {
-    error_log('Erreur lors de la suppression : ' . $e->getMessage());
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-    ]);
+    $response = ['success' => false, 'error' => $e->getMessage()];
+    echo json_encode($response);
+    if (!defined('PHPUNIT_RUNNING')) {
+        http_response_code(500);
+        exit;
+    }
+    return;
 }

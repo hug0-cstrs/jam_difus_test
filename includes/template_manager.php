@@ -206,4 +206,37 @@ class TemplateManager {
             'form' => $form
         ];
     }
+
+    public function render($template, $data = []) {
+        // Si le template est une chaîne, on l'utilise directement
+        // Sinon, on charge le template depuis un fichier et on récupère son contenu HTML
+        if (is_string($template)) {
+            $content = $template;
+        } else {
+            $content = $this->loadTemplate($template);
+            $content = $content->html();
+        }
+        
+        // Parcours de toutes les données à injecter dans le template
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                // Cas des tableaux imbriqués : par exemple pour {{player.name}}, {{player.team}}
+                // $key sera 'player' et $value sera ['name' => 'Zidane', 'team' => 'Real Madrid']
+                foreach ($value as $subKey => $subValue) {
+                    // On remplace {{player.name}} par 'Zidane'
+                    $content = str_replace('{{'.$key.'.'.$subKey.'}}', $subValue, $content);
+                }
+            } else {
+                // Cas des variables simples : par exemple {{team}} sera remplacé par 'Real Madrid'
+                $content = str_replace('{{'.$key.'}}', $value, $content);
+            }
+        }
+        
+        // Suppression des variables non remplacées dans le template
+        // Par exemple si {{age}} n'a pas été fourni dans $data, il sera supprimé
+        // La regex /\{\{[^}]+\}\}/ trouve tous les motifs du type {{quelquechose}}
+        $content = preg_replace('/\{\{[^}]+\}\}/', '', $content);
+        
+        return $content;
+    }
 } 
