@@ -136,7 +136,7 @@ chmod +x phpunit-9.6.phar
 
 ```bash
 # Placez-vous dans le dossier du projet
-cd football-manager-pro
+cd jam_difus_test
 
 # Démarrez le serveur PHP intégré
 php -S localhost:8000
