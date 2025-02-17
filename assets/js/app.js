@@ -242,19 +242,12 @@ $(document).ready(function () {
         return;
       }
 
-      console.log("Données du joueur:", player);
-
       // Mettre à jour le titre avant tout
       const $modal = $("#playerDetailsModal");
       const newTitle = `Détails de ${player.name}`;
-      console.log("Nouveau titre à définir:", newTitle);
 
       // Forcer la mise à jour du titre avant d'afficher la modale
       $modal.find(".modal-title").text(newTitle);
-      console.log(
-        "Titre après mise à jour:",
-        $modal.find(".modal-title").text()
-      );
 
       // Enregistrer les helpers Handlebars
       Handlebars.registerHelper("firstLetter", function (str) {
@@ -548,11 +541,8 @@ $(document).ready(function () {
      ========================================================================== */
   function initializeApp() {
     // Chargement des templates
-    console.log("URL du template:", CONFIG.URLS.PLAYER_DETAILS_TEMPLATE);
-
     $.get(CONFIG.URLS.PLAYER_DETAILS_TEMPLATE)
       .done((template) => {
-        console.log("Template chargé avec succès:", template);
         State.setTemplate("playerDetails", template);
       })
       .fail((error) => {
