@@ -100,7 +100,7 @@ class TemplateManager {
         
         switch ($modalType) {
             case 'player_details_modal':
-                $template->find('.modal-title')->text('Détails du Joueur');
+                $template->find('.modal-title')->text('Détails du joueur');
                 $template->find('.modal-dialog')->addClass('modal-lg');
                 break;
                 
@@ -137,39 +137,6 @@ class TemplateManager {
                         ->text('Êtes-vous sûr de vouloir supprimer ' . $data['name'] . ' ?');
                 }
                 break;
-        }
-        
-        return $template;
-    }
-
-    public function modelConfirmation($type, $message, $details = null) {
-        $template = $this->loadTemplate('components/confirmation_message.html');
-        
-        // Définir le type d'alerte
-        switch ($type) {
-            case 'success':
-                $alertClass = 'alert-success';
-                break;
-            case 'error':
-                $alertClass = 'alert-danger';
-                break;
-            case 'warning':
-                $alertClass = 'alert-warning';
-                break;
-            case 'info':
-                $alertClass = 'alert-info';
-                break;
-            default:
-                $alertClass = 'alert-info';
-        };
-        
-        $template->find('.alert')->addClass($alertClass);
-        $template->find('.message-content')->text($message);
-        
-        if ($details) {
-            $template->find('.message-details')->html($details);
-        } else {
-            $template->find('.message-details')->remove();
         }
         
         return $template;

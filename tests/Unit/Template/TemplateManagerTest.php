@@ -30,14 +30,15 @@ class TemplateManagerTest extends TestCase
     public function testRenderTemplateWithNestedData()
     {
         $data = [
-            'user' => [
-                'name' => 'John Doe',
-                'email' => 'john@example.com'
+            'player' => [
+                'name' => 'Zinédine Zidane',
+                'team' => 'Real Madrid',
+                'position' => 'Milieu'
             ]
         ];
 
-        $template = '<div>{{user.name}} ({{user.email}})</div>';
-        $expected = '<div>John Doe (john@example.com)</div>';
+        $template = '<div class="player-info">{{player.name}} ({{player.team}}) - {{player.position}}</div>';
+        $expected = '<div class="player-info">Zinédine Zidane (Real Madrid) - Milieu</div>';
 
         $result = $this->templateManager->render($template, $data);
         $this->assertEquals($expected, $result);

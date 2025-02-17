@@ -46,18 +46,24 @@ try {
         return new Player($data);
     }, $playersData);
 
-    // Créer le conteneur pour tous les joueurs
-    $playersContainer = $templateManager->loadTemplate('components/players_container.html');
+    // Créer le conteneur HTML pour tous les joueurs
+    $playersHtml = '';
     
     foreach ($players as $index => $player) {
         // Modeler la carte du joueur avec le gestionnaire de templates
         $playerCard = $templateManager->modelPlayerCard($player->toArray());
         // Ajouter l'effet de délai AOS
         $playerCard->find('.col-md-4')->attr('data-aos-delay', $index * 100);
-        $playersContainer->find('.players-list')->append($playerCard->html());
+        $playersHtml .= $playerCard->html();
     }
-    
-    // Préparer la réponse avec le HTML modelé et les données
+
+    // Retourner la réponse
+    $response = [
+        'success' => true,
+        'players' => array_map(function($player) { return $player->toArray(); }, $players),
+        'html' => $playersHtml
+    ];
+
     if (defined('PHPUNIT_RUNNING')) {
         // Pour les tests, convertir les objets en tableaux
         $playersArray = array_map(function($player) {
@@ -65,14 +71,6 @@ try {
         }, $players);
         echo json_encode($playersArray);
     } else {
-        $response = [
-            'success' => true,
-            'html' => $playersContainer->html(),
-            'players' => array_map(function($player) {
-                return $player->toArray();
-            }, $players),
-            'count' => count($players)
-        ];
         echo json_encode($response);
     }
 } catch (PDOException $e) {

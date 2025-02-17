@@ -196,15 +196,26 @@ http://localhost:8000
 ## 📁 Structure détaillée du projet
 
 ```
-football-manager-pro/
+jam_difus_test/
 ├── ajax/                   # Endpoints AJAX
-├── assets/                 # Ressources statiques
-├── includes/              # Classes et configurations
-├── templates/            # Templates HTML modulaires
-└── tests/               # Suite de tests complète
-    ├── Unit/           # Tests unitaires
-    ├── Integration/    # Tests d'intégration
-    └── bootstrap.php   # Configuration des tests
+├── assets/                # Ressources statiques
+├── includes/             # Classes et configurations
+├── scripts/             # Scripts utilitaires
+├── templates/           # Templates HTML modulaires
+├── tests/              # Suite de tests complète
+│   ├── Unit/          # Tests unitaires
+│   ├── Feature/       # Tests de fonctionnalités
+│   ├── Integration/   # Tests d'intégration
+│   ├── Mocks/         # Objets simulés pour les tests
+│   ├── TestCase.php   # Classe de base pour les tests
+│   └── bootstrap.php  # Configuration des tests
+├── vendor/            # Dépendances gérées par Composer
+├── composer.json      # Configuration des dépendances
+├── composer.lock      # Versions verrouillées des dépendances
+├── database.sql       # Structure de la base de données
+├── index.php         # Point d'entrée de l'application
+├── phpunit.xml       # Configuration PHPUnit
+└── phpunit-9.6.phar  # Exécutable PHPUnit
 ```
 
 ## 🔐 Sécurité

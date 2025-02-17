@@ -16,8 +16,14 @@ $(document).ready(function () {
       ADD_PLAYER: "ajax/add_player.php",
       UPDATE_PLAYER: "ajax/update_player.php",
       DELETE_PLAYER: "ajax/delete_player.php",
-      PLAYER_DETAILS_TEMPLATE: "templates/components/player_details.html",
-      PLAYER_CARD_TEMPLATE: "templates/components/player_card.html",
+      PLAYER_DETAILS_TEMPLATE: window.location.pathname.includes(
+        "jamDifus_test"
+      )
+        ? "/jamDifus_test/templates/components/player_details.html"
+        : "/templates/components/player_details.html",
+      PLAYER_CARD_TEMPLATE: window.location.pathname.includes("jamDifus_test")
+        ? "/jamDifus_test/templates/components/player_card.html"
+        : "/templates/components/player_card.html",
     },
     VALIDATION: {
       AGE: {
@@ -231,23 +237,45 @@ $(document).ready(function () {
 
     showDetails(playerId) {
       const player = State.players.find((p) => p.id === playerId);
-      if (!player) return;
+      if (!player) {
+        console.error("Joueur non trouvé:", playerId);
+        return;
+      }
 
-      // Helper pour obtenir la première lettre
+      console.log("Données du joueur:", player);
+
+      // Mettre à jour le titre avant tout
+      const $modal = $("#playerDetailsModal");
+      const newTitle = `Détails de ${player.name}`;
+      console.log("Nouveau titre à définir:", newTitle);
+
+      // Forcer la mise à jour du titre avant d'afficher la modale
+      $modal.find(".modal-title").text(newTitle);
+      console.log(
+        "Titre après mise à jour:",
+        $modal.find(".modal-title").text()
+      );
+
+      // Enregistrer les helpers Handlebars
       Handlebars.registerHelper("firstLetter", function (str) {
         return str.charAt(0);
       });
 
-      // Helper pour valeur par défaut
       Handlebars.registerHelper("default", function (value, defaultValue) {
         return value || defaultValue;
       });
 
+      // Compiler et injecter le contenu
       const template = Handlebars.compile(State.playerDetailsTemplate);
       const modalContent = template(player);
-
       $("#playerDetailsContent").html(modalContent);
-      $("#playerDetailsModal").modal("show");
+
+      // Afficher la modale après la mise à jour du titre
+      $modal
+        .on("show.bs.modal", function () {
+          $(this).find(".modal-title").text(newTitle);
+        })
+        .modal("show");
     },
 
     loadForEdit(playerId) {
@@ -520,11 +548,19 @@ $(document).ready(function () {
      ========================================================================== */
   function initializeApp() {
     // Chargement des templates
-    $.get(CONFIG.URLS.PLAYER_DETAILS_TEMPLATE, (template) => {
-      State.setTemplate("playerDetails", template);
-    }).fail(() => {
-      console.error("Erreur lors du chargement du template des détails");
-    });
+    console.log("URL du template:", CONFIG.URLS.PLAYER_DETAILS_TEMPLATE);
+
+    $.get(CONFIG.URLS.PLAYER_DETAILS_TEMPLATE)
+      .done((template) => {
+        console.log("Template chargé avec succès:", template);
+        State.setTemplate("playerDetails", template);
+      })
+      .fail((error) => {
+        console.error(
+          "Erreur lors du chargement du template des détails:",
+          error
+        );
+      });
 
     // Initialisation des gestionnaires
     ThemeManager.init();
